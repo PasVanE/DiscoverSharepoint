@@ -23,360 +23,363 @@
         <script type="text/javascript" language="javascript"  src="../Scripts/Silverlight.js"></script>
 	
          <script type="text/javascript">
-		    // "use strict";
+             // "use strict";
              var isie = false;
              if (document.documentMode == 10) {
                  isie=true;
+                 
              }
 
- var hasFlash = function() {
+             var hasFlash = function() {
                  try {
                      return (typeof navigator.plugins == "undefined" || navigator.plugins.length == 0) ? !!(new ActiveXObject("ShockwaveFlash.ShockwaveFlash")) : navigator.plugins["Shockwave Flash"];
                  }
                  catch(e) { return false};
              };
+             
+
+
              var capext = "txt";
 
              if (isie){
                  capext = "xml";
              }
+             
+             var hostweburl = '<asp:Literal ID="hostweb" runat="server"></asp:Literal>';
+             var rec = '<asp:Literal ID="recommended" runat="server"></asp:Literal>';
+             var favs = '<asp:Literal ID="favorites" runat="server"></asp:Literal>';
+             var hidden = '<asp:Literal ID="hidden" runat="server"></asp:Literal>';
+             var insp = '<asp:Literal ID="insharepoint" runat="server"></asp:Literal>';
+             var userToken = '<asp:Literal ID="usertoken" runat="server"></asp:Literal>';
+             var approved = '<asp:Literal ID="approved" runat="server"></asp:Literal>';
+             var startpage = 1;
+             //load the SharePoint resources
+             $(document).ready(function () {
+                 if (document.documentMode > 8) {
+                     $("#videomain").show();
+                     $("#videomain").prepend('<source src="https://mediasvc08rg9b3g5vnth.blob.core.windows.net/asset-64114c7b-4aac-49e7-8759-dc99581ca9d4/SharePoint%20Vision%20Video%20v9_8000k.mp4?sv=2012-02-12&st=2013-06-19T00%3A08%3A47Z&se=2015-06-19T00%3A08%3A47Z&sr=c&si=b7947981-aed0-416a-b2e6-3177b19de5b1&sig=6VDF0MHQm%2FO3x0v84fpFsgd4scrxHC42nui048OtbOQ%3D" type="video/mp4"/><track src="../Videos/capmain.'+capext+'" label="English" kind="subtitles" srclang="en" />');
+                 }
+                 else {
+                     if (Silverlight.isInstalled("5.0") || hasFlash() == false)
+                         $("#videowmv").show();
+                     else
+                         $("#videoswf").show();
+                 }
 
-		    var hostweburl = '<asp:Literal ID="hostweb" runat="server"></asp:Literal>';
-		    var rec = '<asp:Literal ID="recommended" runat="server"></asp:Literal>';
-		    var favs = '<asp:Literal ID="favorites" runat="server"></asp:Literal>';
-		    var hidden = '<asp:Literal ID="hidden" runat="server"></asp:Literal>';
-		    var insp = <asp:Literal ID="insharepoint" runat="server"></asp:Literal>;
-		    var userToken = '<asp:Literal ID="usertoken" runat="server"></asp:Literal>';
-		    var approved = <asp:Literal ID="approved" runat="server"></asp:Literal>;
-		    var startpage = 1;
-		    //load the SharePoint resources
-		    $(document).ready(function () {
+                 if (insp) {
+                     var scriptbase;
+                     // The SharePoint js files URL are in the form:
+                     // web_url/_layouts/15/resource
+                     if (hostweburl !== null && hostweburl !== "") {
+                         renderChrome();
+                         scriptbase = hostweburl + "/_layouts/15/";
+                         //$.getScript(scriptbase + "SP.UI.Controls.js", renderChrome);
+                     }
+                     addPage('1');
+                     if (hidden!=null&&hidden!=""){
+                         checkHidden();
+                     }
+                 }
+                 console.log('isadmin = <asp:Literal ID="ltlTest" runat="server"></asp:Literal>');
 
-if (document.documentMode > 8) {
-		            $("#videomain").show();
-		            $("#videomain").prepend('<source src="https://mediasvc08rg9b3g5vnth.blob.core.windows.net/asset-64114c7b-4aac-49e7-8759-dc99581ca9d4/SharePoint%20Vision%20Video%20v9_8000k.mp4?sv=2012-02-12&st=2013-06-19T00%3A08%3A47Z&se=2015-06-19T00%3A08%3A47Z&sr=c&si=b7947981-aed0-416a-b2e6-3177b19de5b1&sig=6VDF0MHQm%2FO3x0v84fpFsgd4scrxHC42nui048OtbOQ%3D" type="video/mp4"/><track src="../Videos/capmain.'+capext+'" label="English" kind="subtitles" srclang="en" />');
-		        }
-		        else {
-		            if (Silverlight.isInstalled("5.0") || hasFlash() == false)
-		                $("#videowmv").show();
-		            else
-		                $("#videoswf").show();
-		        }
+             });
 
-		        if (insp) {
-		            var scriptbase;
-		            // The SharePoint js files URL are in the form:
-		            // web_url/_layouts/15/resource
-		            if (hostweburl !== null && hostweburl !== "") {
-		                renderChrome();
-		                scriptbase = hostweburl + "/_layouts/15/";
-		                //$.getScript(scriptbase + "SP.UI.Controls.js", renderChrome);
-		            }
-		            addPage('1');
-		            if (hidden!=null&&hidden!=""){
-		                checkHidden();
-		            }
-		        }
-		                console.log('isadmin = <asp:Literal ID="ltlTest" runat="server"></asp:Literal>');
-
-		    });
-
-		    //check recommended: 
-		    //TODO: integrate DB code for sharepoint users
-		    function checkHidden() {
-		        var hidArr = parse(hidden);
-		        if (hidArr.length>0){
-		            $(".promo-block-2x1").each(function (index) {
-		                var elem = $(this);
-		                var rel = elem.find('a').attr('rel');
-		                if (jQuery.inArray(rel, hidArr) >= 0) {
-		                    console.log('itmrel-'+rel);
-		                    elem.addClass('hide');
-		                }else{
-		                    elem.removeClass('hide');
-		                }
-		            });
+             //check recommended: 
+             //TODO: integrate DB code for sharepoint users
+             function checkHidden() {
+                 var hidArr = parse(hidden);
+                 if (hidArr.length>0){
+                     $(".promo-block-2x1").each(function (index) {
+                         var elem = $(this);
+                         var rel = elem.find('a').attr('rel');
+                         if (jQuery.inArray(rel, hidArr) >= 0) {
+                             console.log('itmrel-'+rel);
+                             elem.addClass('hide');
+                         }else{
+                             elem.removeClass('hide');
+                         }
+                     });
 
 
-		            $(".hidesec").each(function (index) {
-		                var elem = $(this);
-		                var rel = elem.parent().parent().attr('rel');
-		                if ($.inArray(rel, hidArr) >= 0) {
-		                    elem.attr('src', '../Images/admin_invisible.png').removeClass("hidesec").addClass("showsec");
-							 elem.parent().parent().find('.recsec').attr('src', '../Images/admin_unchecked_invisible.png');
-		                }
-		            });
+                     $(".hidesec").each(function (index) {
+                         var elem = $(this);
+                         var rel = elem.parent().parent().attr('rel');
+                         if ($.inArray(rel, hidArr) >= 0) {
+                             elem.attr('src', '../Images/admin_invisible.png').removeClass("hidesec").addClass("showsec");
+                             elem.parent().parent().find('.recsec').attr('src', '../Images/admin_unchecked_invisible.png');
+                         }
+                     });
 	
-		        }else{
-		            $(".promo-block-2x1").each(function (index) {
-		                var elem = $(this);
-		                elem.removeClass('hide');
-		            });
-		        }
+                 }else{
+                     $(".promo-block-2x1").each(function (index) {
+                         var elem = $(this);
+                         elem.removeClass('hide');
+                     });
+                 }
 	
-		        $(".mbg").each(function (index) {
-		            var elem = $(this);
-		            var secrel = $(this).attr('id').split('-');
-		            if ($(this).attr('rel')!='1-top'){
-		                console.log($(this).hasClass('hide'));
-		                console.log($(this).attr('rel'));
-		                var icount = 0;
-		                var pcount = 0;
-		                elem.find('.promo-block-2x1').each(function (index) {
-		                    if ($(this).hasClass('hide')){
-		                        icount++
-		                    }
-		                    pcount++;
-		                });
-		                if (icount == pcount){
-		                    elem.addClass('hide');
-		                    $('.m_'+secrel[0]).addClass('hide');
-		                }else{
-		                    elem.removeClass('hide');
-		                    $('.m_'+secrel[0]).removeClass('hide');
-		                }
-		            }
-		        });
+                 $(".mbg").each(function (index) {
+                     var elem = $(this);
+                     var secrel = $(this).attr('id').split('-');
+                     if ($(this).attr('rel')!='1-top'){
+                         console.log($(this).hasClass('hide'));
+                         console.log($(this).attr('rel'));
+                         var icount = 0;
+                         var pcount = 0;
+                         elem.find('.promo-block-2x1').each(function (index) {
+                             if ($(this).hasClass('hide')){
+                                 icount++
+                             }
+                             pcount++;
+                         });
+                         if (icount == pcount){
+                             elem.addClass('hide');
+                             $('.m_'+secrel[0]).addClass('hide');
+                         }else{
+                             elem.removeClass('hide');
+                             $('.m_'+secrel[0]).removeClass('hide');
+                         }
+                     }
+                 });
 
 		     
-		        var favarr = parse(favs);
-		        var recarr = parse(rec);
-		        var remrec = false;
-		        var remfav = false;
-		        for (var i = 0; i < hidArr.length; i++) {
+                 var favarr = parse(favs);
+                 var recarr = parse(rec);
+                 var remrec = false;
+                 var remfav = false;
+                 for (var i = 0; i < hidArr.length; i++) {
 
-		            if ($.inArray(hidArr[i], favarr) >= 0) {
-		                remfav = true;
-		                var arrayspot=$.inArray(hidArr[i], favarr);
-		                favarr.splice(arrayspot,1);
-		            }
+                     if ($.inArray(hidArr[i], favarr) >= 0) {
+                         remfav = true;
+                         var arrayspot=$.inArray(hidArr[i], favarr);
+                         favarr.splice(arrayspot,1);
+                     }
 
-		            if ($.inArray(hidArr[i], recarr) >= 0) {
-		                remrec = true;
-		                var arrayspot=$.inArray(hidArr[i], recarr);
-		                recarr.splice(arrayspot,1);
-		            }
+                     if ($.inArray(hidArr[i], recarr) >= 0) {
+                         remrec = true;
+                         var arrayspot=$.inArray(hidArr[i], recarr);
+                         recarr.splice(arrayspot,1);
+                     }
 
-		        }
+                 }
 				
 
-		        if (remrec){
-		            var newrec = '';
-		            for (var i = 0; i < recarr.length; i++) {
-		                newrec+=recarr[i];
-		                if (i<recarr.length-1){
-		                    newrec+=',';
-		                }
-		            }
-		            rec=newrec;
-		            addRec();
-		        }
+                 if (remrec){
+                     var newrec = '';
+                     for (var i = 0; i < recarr.length; i++) {
+                         newrec+=recarr[i];
+                         if (i<recarr.length-1){
+                             newrec+=',';
+                         }
+                     }
+                     rec=newrec;
+                     addRec();
+                 }
 
-		        if (remfav){
-		            var newfav = '';
-		            for (var i = 0; i < favarr.length; i++) {
-		                newfav+=favarr[i];
-		                if (i<favarr.length-1){
-		                    newfav+=',';
-		                }
-		            }
-		            favs=newfav;
-		            addFav()
-		        }
+                 if (remfav){
+                     var newfav = '';
+                     for (var i = 0; i < favarr.length; i++) {
+                         newfav+=favarr[i];
+                         if (i<favarr.length-1){
+                             newfav+=',';
+                         }
+                     }
+                     favs=newfav;
+                     addFav()
+                 }
 		        
 	
-		        <asp:Literal ID="addhiddenfunc" runat="server"></asp:Literal>
-		        //addHidden();
-		    }
+                 <asp:Literal ID="addhiddenfunc" runat="server"></asp:Literal>
+                 //addHidden();
+             }
 
 
-		    function addPage(pageid) {
-		        var pageinfo = { 'usertoken': userToken, 'pageid': pageid };
-		        $.ajax({
-		            type: "POST",
-		            url: "Default.aspx/addPageview",
-		            data: JSON.stringify(pageinfo),
-		            contentType: "application/json; charset=utf-8",
-		            dataType: "json",
-		            success: function (d) {
-		                if (d.d != 'ok') {
-		                    console.log('error in addpage() ' + d.d);
-		                }
-		            },
-		            error: function (xhr, err) { console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status + "\nresponseText: " + xhr.responseText); }
-		        });
-		    }
+             function addPage(pageid) {
+                 var pageinfo = { 'usertoken': userToken, 'pageid': pageid };
+                 $.ajax({
+                     type: "POST",
+                     url: "Default.aspx/addPageview",
+                     data: JSON.stringify(pageinfo),
+                     contentType: "application/json; charset=utf-8",
+                     dataType: "json",
+                     success: function (d) {
+                         if (d.d != 'ok') {
+                             console.log('error in addpage() ' + d.d);
+                         }
+                     },
+                     error: function (xhr, err) { console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status + "\nresponseText: " + xhr.responseText); }
+                 });
+             }
 
-		    function addVideoView(videoid) {
-		        var vidinfo = { 'usertoken': userToken, 'vidid': videoid };
-		        $.ajax({
-		            type: "POST",
-		            url: "Default.aspx/addVideoView",
-		            data: JSON.stringify(vidinfo),
-		            contentType: "application/json; charset=utf-8",
-		            dataType: "json",
-		            success: function (d) {
-		                if (d.d != 'ok') {
-		                    console.log('error in addvideoview() ' + d.d);
-		                }
-		            },
-		            error: function (xhr, err) { console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status + "\nresponseText: " + xhr.responseText); }
-		        });
-		    }
+             function addVideoView(videoid) {
+                 var vidinfo = { 'usertoken': userToken, 'vidid': videoid };
+                 $.ajax({
+                     type: "POST",
+                     url: "Default.aspx/addVideoView",
+                     data: JSON.stringify(vidinfo),
+                     contentType: "application/json; charset=utf-8",
+                     dataType: "json",
+                     success: function (d) {
+                         if (d.d != 'ok') {
+                             console.log('error in addvideoview() ' + d.d);
+                         }
+                     },
+                     error: function (xhr, err) { console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status + "\nresponseText: " + xhr.responseText); }
+                 });
+             }
 
-		    function addVideoDL(videoid) {
-		        var vidinfo = { 'usertoken': userToken, 'vidid': videoid };
-		        $.ajax({
-		            type: "POST",
-		            url: "Default.aspx/addVideoDL",
-		            data: JSON.stringify(vidinfo),
-		            contentType: "application/json; charset=utf-8",
-		            dataType: "json",
-		            success: function (d) {
-		                if (d.d != 'ok') {
-		                    console.log('error in addvideodl() ' + d.d);
-		                }
-		            },
-		            error: function (xhr, err) { console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status + "\nresponseText: " + xhr.responseText); }
-		        });
-		    }
+             function addVideoDL(videoid) {
+                 var vidinfo = { 'usertoken': userToken, 'vidid': videoid };
+                 $.ajax({
+                     type: "POST",
+                     url: "Default.aspx/addVideoDL",
+                     data: JSON.stringify(vidinfo),
+                     contentType: "application/json; charset=utf-8",
+                     dataType: "json",
+                     success: function (d) {
+                         if (d.d != 'ok') {
+                             console.log('error in addvideodl() ' + d.d);
+                         }
+                     },
+                     error: function (xhr, err) { console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status + "\nresponseText: " + xhr.responseText); }
+                 });
+             }
 
-		    function addGuideDL(guideid) {
-		        var guideinfo = { 'usertoken': userToken, 'vidid': guideid };
-		        $.ajax({
-		            type: "POST",
-		            url: "Default.aspx/addGuideDL",
-		            data: JSON.stringify(guideinfo),
-		            contentType: "application/json; charset=utf-8",
-		            dataType: "json",
-		            success: function (d) {
-		                if (d.d != 'ok') {
-		                    console.log('error in addguidedl() ' + d.d);
-		                }
-		            },
-		            error: function (xhr, err) { console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status + "\nresponseText: " + xhr.responseText); }
-		        });
-		    }
+             function addGuideDL(guideid) {
+                 var guideinfo = { 'usertoken': userToken, 'vidid': guideid };
+                 $.ajax({
+                     type: "POST",
+                     url: "Default.aspx/addGuideDL",
+                     data: JSON.stringify(guideinfo),
+                     contentType: "application/json; charset=utf-8",
+                     dataType: "json",
+                     success: function (d) {
+                         if (d.d != 'ok') {
+                             console.log('error in addguidedl() ' + d.d);
+                         }
+                     },
+                     error: function (xhr, err) { console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status + "\nresponseText: " + xhr.responseText); }
+                 });
+             }
 
-		    function addRec() {
-		        var guideinfo = { 'usertoken': userToken, 'rec': rec };
-		        $.ajax({
-		            type: "POST",
-		            url: "Default.aspx/addRec",
-		            data: JSON.stringify(guideinfo),
-		            contentType: "application/json; charset=utf-8",
-		            dataType: "json",
-		            success: function (d) {
-		                console.log(d.d);
-		                if (d.d != 'ok') {
-		                    console.log('error in addrec() ' + d.d);
-		                }
-		            },
-		            error: function (xhr, err) { console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status + "\nresponseText: " + xhr.responseText); }
-		        });
-		    }
+             function addRec() {
+                 var guideinfo = { 'usertoken': userToken, 'rec': rec };
+                 $.ajax({
+                     type: "POST",
+                     url: "Default.aspx/addRec",
+                     data: JSON.stringify(guideinfo),
+                     contentType: "application/json; charset=utf-8",
+                     dataType: "json",
+                     success: function (d) {
+                         console.log(d.d);
+                         if (d.d != 'ok') {
+                             console.log('error in addrec() ' + d.d);
+                         }
+                     },
+                     error: function (xhr, err) { console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status + "\nresponseText: " + xhr.responseText); }
+                 });
+             }
 
-		    function addFav() {
-		        console.log("addfav");
-		        var guideinfo = { 'usertoken': userToken, 'favs': favs };
-		        $.ajax({
-		            type: "POST",
-		            url: "Default.aspx/addFavorite",
-		            data: JSON.stringify(guideinfo),
-		            contentType: "application/json; charset=utf-8",
-		            dataType: "json",
-		            success: function (d) {
-		                console.log(d.d);
-		                if (d.d != 'ok') {
-		                    console.log('error in addfav() ' + d.d);
-		                }
-		            },
-		            error: function (xhr, err) { console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status + "\nresponseText: " + xhr.responseText); }
-		        });
-		    }
+             function addFav() {
+                 console.log("addfav");
+                 var guideinfo = { 'usertoken': userToken, 'favs': favs };
+                 $.ajax({
+                     type: "POST",
+                     url: "Default.aspx/addFavorite",
+                     data: JSON.stringify(guideinfo),
+                     contentType: "application/json; charset=utf-8",
+                     dataType: "json",
+                     success: function (d) {
+                         console.log(d.d);
+                         if (d.d != 'ok') {
+                             console.log('error in addfav() ' + d.d);
+                         }
+                     },
+                     error: function (xhr, err) { console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status + "\nresponseText: " + xhr.responseText); }
+                 });
+             }
 
-		    function sendFeedback(msg) {
-		        modal.close();
-		        var fbinfo = { 'message': msg };
-		        $.ajax({
-		            type: "POST",
-		            url: "Default.aspx/sendFeedback",
-		            data: JSON.stringify(fbinfo),
-		            contentType: "application/json; charset=utf-8",
-		            dataType: "json",
-		            success: function (d) {
+             function sendFeedback(msg) {
+                 modal.close();
+                 var fbinfo = { 'message': msg };
+                 $.ajax({
+                     type: "POST",
+                     url: "Default.aspx/sendFeedback",
+                     data: JSON.stringify(fbinfo),
+                     contentType: "application/json; charset=utf-8",
+                     dataType: "json",
+                     success: function (d) {
 		                
-		                console.log('message sent ' + d.d);
-		            },
-		            error: function (xhr, err) { console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status + "\nresponseText: " + xhr.responseText); }
-		        });
-		    }
+                         console.log('message sent ' + d.d);
+                     },
+                     error: function (xhr, err) { console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status + "\nresponseText: " + xhr.responseText); }
+                 });
+             }
 
 		    
 
 		    
-		    //Function to prepare the options and render the control
-		    function renderChrome() {
-		        // The Help, Account and Contact pages receive the 
-		        //   same query string parameters as the main page
+             //Function to prepare the options and render the control
+             function renderChrome() {
+                 // The Help, Account and Contact pages receive the 
+                 //   same query string parameters as the main page
 
-		        var options = {
-		            "appIconUrl": "siteicon.png",
-		            "appTitle": "Discover Sharepoint",
-		            "appHelpPageUrl": "Help.html?"
-                        + document.URL.split("?")[1],
-		            // The onCssLoaded event allows you to 
-		            //  specify a callback to execute when the
-		            //  chrome resources have been loaded.
-		            "onCssLoaded": "chromeLoaded()",
-		            "settingsLinks": [
-                        {
-                            "linkUrl": "#",
-                            "displayName": "Admin Console"
-                        },
-                        {
-                            "linkUrl": "javascript:showFeedback();",
-                            "displayName": "Contact us"
-                        }
-		            ]
-		        };
+                 var options = {
+                     "appIconUrl": "siteicon.png",
+                     "appTitle": "Discover Sharepoint",
+                     "appHelpPageUrl": "Help.html?"
+                         + document.URL.split("?")[1],
+                     // The onCssLoaded event allows you to 
+                     //  specify a callback to execute when the
+                     //  chrome resources have been loaded.
+                     "onCssLoaded": "chromeLoaded()",
+                     "settingsLinks": [
+                         {
+                             "linkUrl": "#",
+                             "displayName": "Admin Console"
+                         },
+                         {
+                             "linkUrl": "javascript:showFeedback();",
+                             "displayName": "Contact us"
+                         }
+                     ]
+                 };
 
-		        var nav = new SP.UI.Controls.Navigation(
-                                        "chrome_ctrl_placeholder",
-                                        options
-                                    );
-		        nav.setVisible(true);
+                 var nav = new SP.UI.Controls.Navigation(
+                                         "chrome_ctrl_placeholder",
+                                         options
+                                     );
+                 nav.setVisible(true);
 		        
 
-		    }
+             }
 
 
 
-		    <asp:Literal ID="adminscripts" runat="server"></asp:Literal>
+             <asp:Literal ID="adminscripts" runat="server"></asp:Literal>
 
-		    // Function to retrieve a query string value.
-		    // For production purposes you may want to use
-		    //  a library to handle the query string.
+             // Function to retrieve a query string value.
+             // For production purposes you may want to use
+             //  a library to handle the query string.
 
-		    function getQueryStringParameter(paramToRetrieve) {
-		        var params =
-                    document.URL.split("?")[1].split("&");
-		        var strParams = "";
-		        for (var i = 0; i < params.length; i = i + 1) {
-		            var singleParam = params[i].split("=");
-		            if (singleParam[0] == paramToRetrieve)
-		                return singleParam[1];
-		        }
-		    }
+             function getQueryStringParameter(paramToRetrieve) {
+                 var params =
+                     document.URL.split("?")[1].split("&");
+                 var strParams = "";
+                 for (var i = 0; i < params.length; i = i + 1) {
+                     var singleParam = params[i].split("=");
+                     if (singleParam[0] == paramToRetrieve)
+                         return singleParam[1];
+                 }
+             }
 
-		    function chromeLoaded() {
-		        // When the page has loaded the required
-		        //  resources for the chrome control,
-		        //  display the page body.
-		        //$("body").show();
-		        $("#chromeControl_bottomheader").hide();
-		        // resizeWindow();
-		    }
+             function chromeLoaded() {
+                 // When the page has loaded the required
+                 //  resources for the chrome control,
+                 //  display the page body.
+                 //$("body").show();
+                 $("#chromeControl_bottomheader").hide();
+                 // resizeWindow();
+             }
 
 
 </script>		
@@ -444,6 +447,7 @@ if (document.documentMode > 8) {
 	<div id="videop" style="display:none;">
         <video id="vidplayer" width="100" height="100" poster="" controls>Your browser does not support HTML5 Video.</video>
 	</div>
+
 			<div id="end" style="position:absolute;right:0px;"><div class="empowerpeople" style="height:522px;"></div><div class="darkgraybg" style="height:450px;"></div><div class="whitebg" style="height:500px;"></div></div>
 
 				 <!-- column 1 wrapper -->
@@ -452,8 +456,9 @@ if (document.documentMode > 8) {
 <div style="height:2px;background:#888"></div>
 					 <!-- column 01 visual -->
 <div rel="1-top" class="mbg" id="1-main" style="height:600px;position:relative;"><div class="colwrap"><div class="inner"><table class="mntable" id="herograph">
-    <tr><td style="vertical-align:top;" class="txtholder"><h2 style="margin-bottom:5px;margin-top:0px;padding-top:10px">The new way to work together</h2>
-<div style="position:relative; z-index:2; clear:both; margin-top:10px;">&nbsp;&nbsp;&nbsp;<div class="videotxt" style="margin-top:-15px; margin-bottom:15px; font-size:14px; font-family:'Segoe UI Symbol'">SharePoint is about giving you and the people you work with a better way to get things done together. 
+    <tr>
+    <td style="vertical-align:top;" class="txtholder"><h2 style="margin-bottom:5px;margin-top:0px;padding-top:10px">The new way to work together</h2>
+    <div style="position:relative; z-index:2; clear:both; margin-top:10px;">&nbsp;&nbsp;&nbsp;<div class="videotxt" style="margin-top:-15px; margin-bottom:15px; font-size:14px; font-family:'Segoe UI Symbol'">SharePoint is about giving you and the people you work with a better way to get things done together. 
 Browse through these scenarios to discover what SharePoint is and what’s in it for you.</div>
         <div id="videomn" style="display:none;position:absolute">
             <video id="videomain" width="675" height="412" poster="../Images/vision_poster.png" controls></video>
@@ -464,27 +469,31 @@ Browse through these scenarios to discover what SharePoint is and what’s in it
              <div id="mainImageWmv" width="675" height="412">
              <object data="data:application/x-silverlight-2," type="application/x-silverlight-2" width="100%" height="100%">
                <param name="source" value="http://iissmooth.webcastcenter.com/SmoothStreamingPlayer.xap"/>
-               <param name="InitParams" value="DeliveryMethod=Progressive Download, autoplay=false, mediaurl=http://localhost:25498/videos/SharePoint Vision Video.wmv" />
+               <param name="InitParams" value="DeliveryMethod=Progressive Download, mediaurl=http://localhost:25498/videos/SharePoint Vision Video.wmv" />
              </object>
              </div>
            </video>
         </div>
         <div id="videoswf" style="display:none;position:absolute">
-            <img id="mainImageSwf" width="675" height="412" src="../Images/vision_poster.png" />
-<%--           <video id="video1" width="675" height="412" poster="../Images/vision_poster.png" controls>
-            <object type="application/x-shockwave-flash" data="http://localhost:25498/videos/Module 1 - Demo 1.swf" width="675" height="412">
-		        <param name="movie" value="http://localhost:25498/videos/Module 1 - Demo 1.swf" />
+            <%--<img id="mainImageSwf" width="675" height="412" src="../Images/vision_poster.png" />--%>
+           <video id="video1" width="675" height="412" poster="../Images/vision_poster.png" controls>
+            <object type="application/x-shockwave-flash" data="http://discoversharepointdevelopment.azurewebsites.net/videos/SharePoint Vision Video.swf" width="675" height="412">
+		        <param name="movie" value="http://discoversharepointdevelopment.azurewebsites.net/videos/SharePoint Vision Video.swf" />
 		        <param name="allowFullScreen" value="true" />
 		        <param name="wmode" value="transparent" />
 		        <param name="flashVars" value="config={'playlist':['http%3A%2F%2Flocalhost:57992%2FImages%2Fvision_poster.png',{'url':'http%3A%2F%2Fclips.vorwaerts-gmbh.de%2Fbig_buck_bunny.mp4','autoPlay':false}]}" />
 		        <img alt="Big Buck Bunny" src="../Images/vision_poster.png" width="640" height="360" title="No video playback capabilities, please download the video below" />
 	        </object>
-           </video>--%>
+           </video>
         </div>
 <%--           <object type="application/x-shockwave-flash" data=http://localhost:25498/videos/Module 1 - Demo 1.swf" width="675" height="412">
               <param name="movie" value="http://localhost:25498/videos/Module 1 - Demo 1.swf" />--%>
-        
-    <ul><li class="fl" style="padding-right:20px;"><div style="margin-right:20px;" class="dlbuttonm reg" rel="http://go.microsoft.com/fwlink/p/?LinkId=301522"><ul><li>Get the Use Case Catalog</li></ul></div></li><li class="fl"><div class="dlbuttonm reg" rel="http://go.microsoft.com/fwlink/p/?LinkId=311967"><ul><li>Get the Adoption Guide</li></ul></div></li></ul></div></td><td class="icholder" style="vertical-align:top;" id="rfbox"><div style="margin-bottom:10px; position:relative;">
+    <div id="dvUI" style="position:absolute;top:413px">
+    <ul><li class="fl" style="padding-right:20px;"><div style="margin-right:20px;" class="dlbuttonm reg" rel="http://go.microsoft.com/fwlink/p/?LinkId=301522"><ul><li>Get the Use Case Catalog</li></ul></div></li>
+        <li class="fl"><div class="dlbuttonm reg" rel="http://go.microsoft.com/fwlink/p/?LinkId=311967"><ul><li>Get the Adoption Guide</li></ul></div></li>
+    </ul>
+    </div>
+    </div></td><td class="icholder" style="vertical-align:top;" id="rfbox"><div style="margin-bottom:10px; position:relative;">
     <div id="favmain" style="height:35px; line-height:35px; position:absolute;bottom:0px;left:45px;font-size:30px;font-weight:lighter;font-family: 'wf_SegoeUILight','wf_SegoeUI','Segoe UI Light','Segoe WP Light','Segoe UI','Segoe','Segoe WP','Tahoma','Verdana','Arial','sans-serif';">
         <a style="color:#444;" class="off" id="rec" href="#">Recommended</a>
         <a id="fav" style="color:#999;padding-left:30px;" class="on" href="#">Favorites</a>
@@ -498,7 +507,7 @@ Browse through these scenarios to discover what SharePoint is and what’s in it
              
         </td></tr></table></div></div></div>
 		<!-- general -->
-		<div rel="2-getstarted" id="1-main" class="mbg" style="height:600px;position:relative;"><div class="colwrap"><div class="hide-show back-button-holder" style="position:absolute;right:60px;top:60px;">
+		<div rel="2-getstarted" id="Div1" class="mbg" style="height:600px;position:relative;"><div class="colwrap"><div class="hide-show back-button-holder" style="position:absolute;right:60px;top:60px;">
                         <div id="general" class="pull-left arrowclick">
                             <img src="../Images/arrow-wh.png"/>
                         </div>
@@ -819,7 +828,7 @@ Browse through these scenarios to discover what SharePoint is and what’s in it
 		 
 		<!-- Keep Everyone On The Same Page -->
 		<div class="samepage bar"><div class="contentstretch samepage"></div><div class="colwrap"><div class="inner"><table class="mntable"><tr><td class="cleft" style="width:582px;vertical-align:top;"><div style="height:50px;position:relative;"><div class="icons"></div></div><div class="rtext"><div class="textcont"><div class="white htext">Keep Everyone On The Same Page</div><p class="white mntext">Wouldn’t it be great if you and your team had a single place where you could get work done together and stay in sync with each other? SharePoint is exactly that kind of place. It’s a home base where you and your team can share and organize your resources—like notes, documents, schedules, conversations, and much more. No more running around to find what you need or get people what they need. Just go to your team site to get what you want, and then share your stuff instantly with the whole group.</p></div></div><table class="arrowbtn"><tr><td><div class="more white" style="display:none;"><div style="height:6px;"></div><div class="hide"></div><div class="rtoggle"><img src="../Images/down-white.png"/>&nbsp;&nbsp;Show more</div></div></td><td ><div style="height:6px;"></div><div class="gguide white"><a style="color:White;" target="_blank" href="http://go.microsoft.com/fwlink/p/?LinkId=309821"><img src="../Images/down-white.png"/>&nbsp;&nbsp;Get the Guide</a></div></td></tr></table></div></td><td class="cmid" style="width:120px"></td><td style="vertical-align:middle;"><div style="height:50px;"></div><img class="ucimage" style="width:480px" src="../Images/2tall_img.png"/></td></tr></table><div style="height:50px;position:relative;"></div></div></div></div>
-	
+		
 		<!-- testimonial-->
 		<div class="darkgraybg bar"><div class="contentstretch darkgraybg"></div><div style="height:20px;"></div><div class="colwraptxt"><div class="inner"><table><tr><td style="vertical-align:top;"><img src="../Images/quotes.png"/></td><td><p class="black tq2">Our research shows that we can increase our productivity up to 25 percent by using social collaboration in the enterprise.</p></td><td style="vertical-align:bottom;"><img src="../Images/quotes2.png"/></td></tr><tr><td></td><td><div style="position:relative;"><div style="position:absolute;top:30px;"><img src="../Images/testimonial_person.png"/></div><div style="position:absolute;left:70px;"><h3 style="margin-top:35px;margin-bottom:10px;">Head of Content Management</h3><p class="blue tb">-Finance Services, Banking</p></div></div></td><td></td></tr></table></div></div><div style="height:105px;"></div></div>
 			
@@ -840,12 +849,12 @@ Browse through these scenarios to discover what SharePoint is and what’s in it
 		 </div>
 		
 		
-		<!-- Stay on track and deliver on time -->
+		<!-- Stay On Track And Deliver On Time -->
 		
 		<div id="stay_on_track_and_deliver_on_time" rel="3" class="column_content clearfix c_3">
 		
 		<div class="ontrack bar"><div class="contentstretch ontrack"></div><div class="colwrap"><div class="inner"><table class="mntable"><tr><td class="cleft" style="width:582px;vertical-align:top;"><div style="height:50px;position:relative;"><div class="icons"></div></div><div class="rtext"><div class="textcont"><div class="white htext">Stay On Track And Deliver On Time</div><p class="mntext white">Isn't life grand - when all your projects are on track and you meet all your deadlines? SharePoint can make your life a lot easier by helping you organize teamwork around common milestones. You can make sure work gets done by assigning people tasks that can be tracked and prioritized. And, you can keep an eye on important details with a real - time summary of your project that warns you about delays and keeps next steps and milestones on your radar. When it comes to really big and complicated projects, you can use Project Professional to manage task dependencies, balance resource allocations, and easily generate status reports. No need to worry - this all stays in sync with your site, where you can all continue to work together to keep your project on track.</p></div></div><table class="arrowbtn"><tr><td><div class="more white" style="display:none;"><div style="height:6px;"></div><div class="hide"></div><div class="rtoggle"><img src="../Images/down-white.png"/>&nbsp;&nbsp;Show more</div></div></td><td><div style="height:6px;"></div><div class="gguide white"><a style="color:White;" target="_blank" href="http://go.microsoft.com/fwlink/p/?LinkId=309823"><img src="../Images/down-white.png"/>&nbsp;&nbsp;Get the Guide</a></div></td></tr></table></td><td class="cmid" style="width:120px"></td><td style="vertical-align:middle;"><div style="height:50px;"></div><img class="ucimage" style="width:480px" src="../Images/3tall_img.png"/></td></tr></table><div style="height:50px;position:relative;"></div></div></div></div>
-			
+		
 		
 		<!-- testimonial-->
 		<div class="darkgraybg bar"><div class="contentstretch darkgraybg"></div><div style="height:20px;"></div><div class="colwraptxt"><div class="inner"><table><tr><td style="vertical-align:top;"><img src="../Images/quotes.png"/></td><td><p class="black tq2">Project in combination with SharePoint; I think you have a very powerful tool there.</p></td><td style="vertical-align:bottom;"><img src="../Images/quotes2.png"/></td></tr><tr><td></td><td><div style="position:relative;"><div style="position:absolute;top:30px;"><img src="../Images/testimonial_person.png"/></div><div style="position:absolute;left:70px;"><h3 style="margin-top:35px;margin-bottom:10px;">Dr. Christian Buddendick</h3><p class="blue tb">-Head of Workplace Platform Services, Hilti Corporation</p></div></div></td><td></td></tr></table></div></div><div style="height:105px;"></div></div>
@@ -918,7 +927,7 @@ Browse through these scenarios to discover what SharePoint is and what’s in it
 				   
 		<!-- Make informed Decisions-->
 		<div class="betterdecisions bar"><div class="contentstretch betterdecisions"></div><div class="colwrap"><div class="inner"><table class="mntable"><tr><td class="cleft" style="width:582px;vertical-align:top;"><div style="height:50px;position:relative;"><div class="icons"></div></div><div class="rtext"><div class="textcont"><div class="white htext">Make Informed Decisions</div><p class="white mntext">Making good decisions is not always just about good judgment or experience. It’s also about collecting and making sense of lots of data. That’s where Power Pivot comes in: it lets you easily combine massive amounts of data from multiple sources and build sophisticated models out of it. But data alone isn’t enough—it needs to be expressed clearly to make a powerful impact on people. That’s what Power View is for. It lets you explore, visualize, and present data in compelling ways, and create exciting dashboards that you can quickly share with others in SharePoint. Now people can easily dig into your data to make great decisions and new discoveries.</p></div></div><table class="arrowbtn"><tr><td><div class="more white" style="display:none;"><div style="height:6px;"></div><div class="hide"></div><div class="rtoggle"><img src="../Images/down-white.png"/>&nbsp;&nbsp;Show more</div></div></td><td><div style="height:6px;"></div><div class="gguide white"><a style="color:White;" target="_blank" href="http://go.microsoft.com/fwlink/p/?LinkId=309829"><img src="../Images/down-white.png"/>&nbsp;&nbsp;Get the Guide</a></div></td></tr></table></td><td class="cmid" style="width:120px"></td><td style="vertical-align:middle;"><div style="height:50px;"></div><img class="ucimage" style="width:4800px" src="../Images/6tall_img.png"/></td></tr></table><div style="height:50px;position:relative;"></div></div></div></div>
-
+	
 <!-- testimonial-->
 		<div class="darkgraybg bar"><div class="contentstretch darkgraybg"></div><div style="height:20px;"></div><div class="colwraptxt"><div class="inner"><table><tr><td style="vertical-align:top;"><img src="../Images/quotes.png"/></td><td><p class="black tq2">Power View allows executives and employees to look at their data from almost any angle at varying levels of granularity. Employees can use scorecards to easily track both time and performance metrics to be more effective in their jobs.</p></td><td style="vertical-align:bottom;"><img src="../Images/quotes2.png"/></td></tr><tr><td></td><td><div style="position:relative;"><div style="position:absolute;top:30px;"><img src="../Images/testimonial_person.png"/></div><div style="position:absolute;left:70px;"><h3 style="margin-top:35px;margin-bottom:10px;"> Paul Di Felice</h3><p class="blue tb">-Associate Director for Consulting and Analysis, Regional Municipality of Niagara</p></div></div></td><td></td></tr></table></div></div><div style="height:105px;"></div></div>
 		<!-- use case-->
@@ -958,7 +967,7 @@ Browse through these scenarios to discover what SharePoint is and what’s in it
 		<!-- Onboard New Employees -->
 		<div class="onboarding bar"><div class="contentstretch onboarding"></div><div class="colwrap"><div class="inner"><table class="mntable"><tr><td class="cleft" style="width:582px;vertical-align:top;"><div style="height:50px;position:relative;"><div class="icons"></div></div>
             <div class="rtext"><div class="textcont"><div class="white htext">Onboard New Employees</div><p class="white mntext">First days are stressful—for both new employees and the HR department. There’s a lot to learn and a lot to tell. Where do you begin? SharePoint can be the single hub for everything that a new hire needs on its first day, and beyond. You can make it easier for people to connect with their peers or mentors, understand the business, and ramp up rapidly. You can take advantage of automatic task routing and use forms built right into your site, leading to less paperwork and faster completion. Better processes, less time, smoother onboarding. What’s there to stress about?</p></div></div><table class="arrowbtn"><tr><td><div class="more white" style="display:none;"><div style="height:6px;"></div><div class="hide"></div><div class="rtoggle"><img src="../Images/down-white.png"/>&nbsp;&nbsp;Show more</div></div></td><td><div style="height:6px;"></div><div class="gguideh white"><img src="../Images/down-white.png"/>&nbsp;&nbsp;Get the Guide</div></td></tr></table></td><td class="cmid" style="width:120px"></td><td style="vertical-align:middle;"><div style="height:50px;"></div><img class="ucimage" style="width:4800px" src="../Images/9tall_img.png"/></td></tr></table><div style="height:50px;position:relative;"></div></div></div></div>
-	
+		
 		<!-- testimonial-->
 		<div class="darkgraybg bar"><div class="contentstretch darkgraybg"></div><div style="height:20px;"></div><div class="colwraptxt"><div class="inner"><table><tr><td style="vertical-align:top;"><img src="../Images/quotes.png"/></td><td><p class="black tq2">Electronic records not only reduce paper consumption, they also save on transportation and energy costs for moving and storing those records.</p></td><td style="vertical-align:bottom;"><img src="../Images/quotes2.png"/></td></tr><tr><td></td><td><div style="position:relative;"><div style="position:absolute;top:30px;"><img src="../Images/testimonial_person.png"/></div><div style="position:absolute;left:70px;"><h3 style="margin-top:35px;margin-bottom:10px;">Steve Folkerts</h3><p class="blue tb">-Project Manager for ECM, Regional Municipality of Niagara</p></div></div></td><td></td></tr></table></div></div><div style="height:105px;"></div></div>
 		
@@ -979,7 +988,7 @@ Browse through these scenarios to discover what SharePoint is and what’s in it
 		<div id="keep_everyone_informed" rel="8" class="column_content clearfix c_8" >
 	
 		<div class="informed bar"><div class="contentstretch informed"></div><div class="colwrap"><div class="inner"><table class="mntable"><tr><td class="cleft" style="width:582px;vertical-align:top;"><div style="height:50px;position:relative;"><div class="icons"></div></div><div class="rtext"><div class="textcont"><div class="white htext">Keep Everyone Informed</div><p class="white mntext">Your company has a unique story, but like any great tale, it needs people to make it come alive. How do you get your employees excited about your vision? How do you get them talking about ideas…and talking to each other? SharePoint makes it easy to keep everyone engaged. It’s a one-stop shop where people can find the latest news and information. It can be a great place for people to have live discussions, give real-time feedback, and share experiences. SharePoint is like a “social glue” that keeps your employees and your vision moving forward together.</p></div></div><table class="arrowbtn"><tr><td><div class="more white" style="display:none;"><div style="height:6px;"></div><div class="hide"></div><div class="rtoggle"><img src="../Images/down-white.png"/>&nbsp;&nbsp;Show more</div></div></td><td><div style="height:6px;"></div><div class="gguideh white"><img src="../Images/down-white.png"/>&nbsp;&nbsp;Get the Guide</div></td></tr></table></td><td class="cmid" style="width:120px"></td><td style="vertical-align:middle;"><div style="height:50px;"></div><img class="ucimage" style="width:4800px" src="../Images/10tall_img.png"/></td></tr></table><div style="height:50px;position:relative;"></div></div></div></div>
-			
+		
 		<!-- testimonial-->
 		<div class="darkgraybg bar"><div class="contentstretch darkgraybg"></div><div style="height:20px;"></div><div class="colwraptxt"><div class="inner"><table><tr><td style="vertical-align:top;"><img src="../Images/quotes.png"/></td><td><p class="black tq2">We will help people work together natively and intuitively, without having to negotiate department boundaries or navigate multiple sources of information.</p></td><td style="vertical-align:bottom;"><img src="../Images/quotes2.png"/></td></tr><tr><td></td><td><div style="position:relative;"><div style="position:absolute;top:30px;"><img src="../Images/testimonial_person.png"/></div><div style="position:absolute;left:70px;"><h3 style="margin-top:35px;margin-bottom:10px;">Head of Content Management</h3><p class="blue tb">-Finance Services, Banking</p></div></div></td><td></td></tr></table></div></div><div style="height:105px;"></div></div>
 		
@@ -1002,7 +1011,7 @@ Browse through these scenarios to discover what SharePoint is and what’s in it
 
 		<!-- Share Your Knowledge -->
 		<div class="sharepractices bar"><div class="contentstretch sharepractices"></div><div class="colwrap"><div class="inner"><table class="mntable"><tr><td class="cleft" style="width:582px;vertical-align:top;"><div style="height:50px;position:relative;"><div class="icons"></div></div><div class="rtext"><div class="textcont"><div class="black htext">Share Your Knowledge</div><p class="black mntext">With SharePoint, your knowledge isn’t limited to the people in your immediate circle. SharePoint lets you share what you know with as many people as you want, whether they’re in your department or in another country. So don’t let your good ideas, valuable experience, and expert knowledge go to waste. You can capture and organize best practices in one place, organize them however you need to, and refine them with your peers. Now people in your organization can easily discover what you know. And sharing works both ways, too. It’s just as easy for you to discover other groups’ best practices.</p></div></div><table class="arrowbtn"><tr><td><div class="more white" style="display:none;"><div style="height:6px;"></div><div class="hide"></div><div class="rtoggle black"><img src="../Images/down.png"/>&nbsp;&nbsp;Show more</div></div></td><td><div style="height:6px;"></div><div class="gguideh reg"><img src="../Images/down.png"/>&nbsp;&nbsp;Get the Guide</div></td></tr></table></td><td class="cmid" style="width:120px"></td><td style="vertical-align:middle;"><div style="height:50px;"></div><img class="ucimage" style="width:4800px" src="../Images/11tall_img.png"/></td></tr></table><div style="height:50px;position:relative;"></div></div></div></div>
-	
+		
 		<!-- testimonial-->
 		<div class="darkgraybg bar"><div class="contentstretch darkgraybg"></div><div style="height:20px;"></div><div class="colwraptxt"><div class="inner"><table><tr><td style="vertical-align:top;"><img src="../Images/quotes.png"/></td><td><p class="black tq2">We want to create a better sense of community and help employees find colleagues who might have the answers to their questions.</p></td><td style="vertical-align:bottom;"><img src="../Images/quotes2.png"/></td></tr><tr><td></td><td><div style="position:relative;"><div style="position:absolute;top:30px;"><img src="../Images/testimonial_person.png"/></div><div style="position:absolute;left:70px;"><h3 style="margin-top:35px;margin-bottom:10px;">Cedric Krouri</h3><p class="blue tb">-IT Project Manager, Aéroports de Paris</p></div></div></td><td></td></tr></table></div></div><div style="height:105px;"></div></div>
 		
@@ -1125,7 +1134,7 @@ Browse through these scenarios to discover what SharePoint is and what’s in it
 
 		<!-- Help Meet Compliance Needs -->
 		<div class="retention bar"><div class="contentstretch retention"></div><div class="colwrap"><div class="inner"><table class="mntable"><tr><td class="cleft" style="width:582px;vertical-align:top;"><div style="height:50px;position:relative;"><div class="icons"></div></div><div class="rtext"><div class="textcont"><div class="white htext">Help Meet Compliance Needs</div><p class="white mntext">Trying to make sense of all the rules, laws, and regulations you need to follow is hard enough without retrofitting your whole IT infrastructure to comply with them. You won’t run into this problem with SharePoint because it’s built to make compliance easy and straightforward. In fact, with SharePoint you can automate many of the processes for managing, protecting, and preserving critical data, and even create retention schedules to manage the entire life cycle of your organization’s digital assets. If you ever need to respond quickly to litigation or audits, you can use self-service eDiscovery to help get what you need immediately without involving IT.</p></div></div><table class="arrowbtn"><tr><td><div class="more white" style="display:none;"><div style="height:6px;"></div><div class="hide"></div><div class="rtoggle"><img src="../Images/down-white.png"/>&nbsp;&nbsp;Show more</div></div></td><td><div style="height:6px;"></div><div class="gguideh white"><img src="../Images/down-white.png"/>&nbsp;&nbsp;Get the Guide</div></td></tr></table></td><td class="cmid" style="width:120px"></td><td style="vertical-align:middle;"><div style="height:50px;"></div><img class="ucimage" style="width:480px" src="../Images/17tall_img.png"/></td></tr></table><div style="height:50px;position:relative;"></div></div></div></div>
-			
+		
 		<!-- testimonial-->
 		<div class="darkgraybg bar"><div class="contentstretch darkgraybg"></div><div style="height:20px;"></div><div class="colwraptxt"><div class="inner"><table><tr><td style="vertical-align:top;"><img src="../Images/quotes.png"/></td><td><p class="black tq2">The tight integration of the Office Suite with SharePoint 2013 will enable true eDiscovery which, for our enterprise, was the original goal for deployment of SharePoint system-wide.</p></td><td style="vertical-align:bottom;"><img src="../Images/quotes2.png"/></td></tr><tr><td></td><td><div style="position:relative;"><div style="position:absolute;top:30px;"><img src="../Images/testimonial_lady.png"/></div><div style="position:absolute;left:70px;"><h3 style="margin-top:35px;margin-bottom:10px;">Denise Wilson</h3><p class="blue tb">-Senior Manager, Platform Engineering, Microsoft Collaboration Services, United Airlines</p></div></div></td><td></td></tr></table></div></div><div style="height:105px;"></div></div>
 		
@@ -1166,9 +1175,8 @@ Browse through these scenarios to discover what SharePoint is and what’s in it
 		 
 			<div id="empower_people_and_stay_in_control" rel="17" class="column_content clearfix c_17" >	 
 				 
-		<!-- Empower people and stay in control -->
-
-		<div class="empowerpeople bar"><div class="contentstretch empowerpeople"></div><div class="colwrap"><div class="inner"><table class="mntable"><tr><td class="cleft" style="width:582px;vertical-align:top;"><div style="height:50px;position:relative;"><div class="icons"></div></div><div class="rtext"><div class="textcont"><div class="white htext">Empower people and stay in control</div><p class="white mntext">It’s a common dilemma: How do you strike a balance between the needs of IT and the needs of users? IT needs centralized control over security and compliance to better manage risks. People want more flexibility in SharePoint to work together. So who’s right? With SharePoint, everyone’s right. IT can make SharePoint more open and provide a safety net so that people’s sites comply with IT controls, permissions, and policies. It’s a win-win situation.</p></div></div><table class="arrowbtn"><tr><td><div class="more white" style="display:none;"><div style="height:6px;"></div><div class="hide"></div><div class="rtoggle"><img src="../Images/down-white.png"/>&nbsp;&nbsp;Show more</div></div></td><td><div style="height:6px;"></div><div class="gguideh white"><img src="../Images/down-white.png"/>&nbsp;&nbsp;Get the Guide</div></td></tr></table></td><td class="cmid" style="width:120px"></td><td style="vertical-align:middle;"><div style="height:50px;"></div><img class="ucimage" style="width:4800px" src="../Images/8tall_img.png"/></td></tr></table><div style="height:50px;position:relative;"></div></div></div></div>
+		<!-- Empower People And Stay In Control -->
+		<div class="empowerpeople bar"><div class="contentstretch empowerpeople"></div><div class="colwrap"><div class="inner"><table class="mntable"><tr><td class="cleft" style="width:582px;vertical-align:top;"><div style="height:50px;position:relative;"><div class="icons"></div></div><div class="rtext"><div class="textcont"><div class="white htext">Empower People And Stay In Control</div><p class="white mntext">It’s a common dilemma: How do you strike a balance between the needs of IT and the needs of users? IT needs centralized control over security and compliance to better manage risks. People want more flexibility in SharePoint to work together. So who’s right? With SharePoint, everyone’s right. IT can make SharePoint more open and provide a safety net so that people’s sites comply with IT controls, permissions, and policies. It’s a win-win situation.</p></div></div><table class="arrowbtn"><tr><td><div class="more white" style="display:none;"><div style="height:6px;"></div><div class="hide"></div><div class="rtoggle"><img src="../Images/down-white.png"/>&nbsp;&nbsp;Show more</div></div></td><td><div style="height:6px;"></div><div class="gguideh white"><img src="../Images/down-white.png"/>&nbsp;&nbsp;Get the Guide</div></td></tr></table></td><td class="cmid" style="width:120px"></td><td style="vertical-align:middle;"><div style="height:50px;"></div><img class="ucimage" style="width:4800px" src="../Images/8tall_img.png"/></td></tr></table><div style="height:50px;position:relative;"></div></div></div></div>
 		
 		<!-- testimonial-->
 		<div class="darkgraybg bar"><div class="contentstretch darkgraybg"></div><div style="height:20px;"></div><div class="colwraptxt"><div class="inner"><table><tr><td style="vertical-align:top;"><img src="../Images/quotes.png"/></td><td><p class="black tq2">Site creation is automated, and we assign metadata at the site level, rather than the document level, so it's easier to use. The system integrates with our records management workflows, so documents are automatically retained and disposed of according to mandated schedules.</p></td><td style="vertical-align:bottom;"><img src="../Images/quotes2.png"/></td></tr><tr><td></td><td><div style="position:relative;"><div style="position:absolute;top:30px;"><img src="../Images/testimonial_person.png"/></div><div style="position:absolute;left:70px;"><h3 style="margin-top:35px;margin-bottom:10px;">Steve Folkerts</h3><p class="blue tb">- Project Manager for ECM, Regional Municipality of Niagara</p></div></div></td><td></td></tr></table></div></div><div style="height:105px;"></div></div>
@@ -1203,7 +1211,7 @@ Browse through these scenarios to discover what SharePoint is and what’s in it
         </div></div></div>
 		<!-- getstarted-->
 		<div class="whitebg" style="height:500px;position:relative;"><div class="colwrap"><div style="border-top:solid 1px #222;" class="inner">
-		<table style="width:1240px;"><tr><td style="vertical-align:top;width:25%;padding-right:35px;"><table><tr><td colspan="3"><h3>Get Started</h3></td></tr><tr style="vertical-align:top;" rel="1"><td><img class="hidesec" style="padding-right:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding-right:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Store sync, and share your content</td></tr></tr><tr style="vertical-align:top;" rel="2"><td><img class="hidesec" style="padding-right:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding-right:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Keep everyone on the same page</td></tr><tr style="vertical-align:top;" rel="3"><td><img class="hidesec" style="padding-right:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Stay on track and deliver on time</td></tr><tr style="vertical-align:top;" rel="4"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Find the right people</td></tr><tr style="vertical-align:top;" rel="5"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Find what you need</td></tr><tr style="vertical-align:top;" rel="6"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Make informed decisions</td></tr></table></td><td style="vertical-align:top;width:25%;padding-right:35px;"><table><tr><td colspan="3"><h3>HR & Internal<br>Communications</h3></td></tr><tr style="vertical-align:top;" rel="7"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Onboard new employees</td></tr><tr style="vertical-align:top;" rel="8"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Keep everyone informed</td></tr><tr><td colspan="3" style="height:20px;"></td></tr><tr><td colspan="3"><h3>R&D, Production, & <br>Operations</h3></td></tr><tr style="vertical-align:top;" rel="9"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Share your knowledge</td></tr><tr style="vertical-align:top;" rel="10"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Boost business processes</td></tr></table></td><td style="vertical-align:top;width:25%;padding-right:35px;"><table><tr><td colspan="3"><h3>Sales & Marketing</h3></td></tr><tr style="vertical-align:top;" rel="11"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Make your customers and partners happy</td></tr><tr style="vertical-align:top;" rel="12"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Engage your audience online</td></tr><tr style="vertical-align:top;" rel="13"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Align your teams</td></tr><tr><td colspan="3" style="height:20px;"></td></tr><tr><td colspan="3"><h3>Finance & Accounting</h3></td></tr><tr style="vertical-align:top;" rel="14"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Crunch the numbers together</td></tr></table></td><td style="vertical-align:top;width:25%;padding-right:35px;"><table><tr><td colspan="3"><h3>Legal</h3></td></tr><tr style="vertical-align:top;" rel="15"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Help meet compliance needs</td></tr><tr><td colspan="3" style="height:20px;"></td></tr><tr><td colspan="3"><h3>Information Technology</h3></td></tr><tr style="vertical-align:top;" rel="16"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Provide the right support</td></tr><tr style="vertical-align:top;" rel="17"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Empower people and stay in control</td></tr></table></td></tr></table>
+		<table style="width:1240px;"><tr><td style="vertical-align:top;width:25%;padding-right:35px;"><table><tr><td colspan="3"><h3>Get Started</h3></td></tr><tr style="vertical-align:top;" rel="1"><td><img class="hidesec" style="padding-right:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding-right:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Store sync, and share your content</td></tr></tr><tr style="vertical-align:top;" rel="2"><td><img class="hidesec" style="padding-right:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding-right:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Keep Everyone On The Same Page</td></tr><tr style="vertical-align:top;" rel="3"><td><img class="hidesec" style="padding-right:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Stay On Track And Deliver On Time</td></tr><tr style="vertical-align:top;" rel="4"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Find The Right People</td></tr><tr style="vertical-align:top;" rel="5"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Find What You Need</td></tr><tr style="vertical-align:top;" rel="6"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Make Informed Decisions</td></tr></table></td><td style="vertical-align:top;width:25%;padding-right:35px;"><table><tr><td colspan="3"><h3>HR & Internal<br>Communications</h3></td></tr><tr style="vertical-align:top;" rel="7"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Onboard New Employees</td></tr><tr style="vertical-align:top;" rel="8"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Keep Everyone Informed</td></tr><tr><td colspan="3" style="height:20px;"></td></tr><tr><td colspan="3"><h3>R&D, Production, & <br>Operations</h3></td></tr><tr style="vertical-align:top;" rel="9"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Share Your Knowledge</td></tr><tr style="vertical-align:top;" rel="10"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Boost Business Processes</td></tr></table></td><td style="vertical-align:top;width:25%;padding-right:35px;"><table><tr><td colspan="3"><h3>Sales & Marketing</h3></td></tr><tr style="vertical-align:top;" rel="11"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Make Your Customers And Partners Happy</td></tr><tr style="vertical-align:top;" rel="12"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Engage Your Audience Online</td></tr><tr style="vertical-align:top;" rel="13"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Align Your Teams</td></tr><tr><td colspan="3" style="height:20px;"></td></tr><tr><td colspan="3"><h3>Finance & Accounting</h3></td></tr><tr style="vertical-align:top;" rel="14"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Crunch The Numbers Together</td></tr></table></td><td style="vertical-align:top;width:25%;padding-right:35px;"><table><tr><td colspan="3"><h3>Legal</h3></td></tr><tr style="vertical-align:top;" rel="15"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Help Meet Compliance Needs</td></tr><tr><td colspan="3" style="height:20px;"></td></tr><tr><td colspan="3"><h3>Information Technology</h3></td></tr><tr style="vertical-align:top;" rel="16"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Provide The Right Support</td></tr><tr style="vertical-align:top;" rel="17"><td><img class="hidesec" style="padding:3px;" src="../Images/admin_visible.png"></td><td><img class="recsec" style="padding:3px;" src="../Images/admin_unchecked.png"></td><td class="ptext">Empower People And Stay In Control</td></tr></table></td></tr></table>
 		</div></div></div>
 		
 		

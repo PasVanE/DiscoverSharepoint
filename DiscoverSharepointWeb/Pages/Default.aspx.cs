@@ -8,7 +8,6 @@ using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Web.Services;
 using System.Text;
-using Newtonsoft.Json.Linq;
 using System.Globalization;
 using Microsoft.SharePoint.Client;
 using Microsoft.SharePoint;

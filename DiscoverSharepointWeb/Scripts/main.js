@@ -158,8 +158,7 @@ var childToParent = [];
         };
 
         this.each(
-            function ()
-            {
+            function () {
                 init(this);
             });
 
@@ -235,6 +234,7 @@ var windowWidth, positionPrevious, positionActive, positionNext, handleWidth, vi
 var lastdiv = 0;
 var resizeInterval;
 var baseurl = "http://discoversharepointdevelopment.azurewebsites.net";
+//var baseurl = "http://localhost:25498";
 var linkurl = "http://" + baseurl + "/";
 var add = "";
 jQuery.easing.def = "easeInOutSine";
@@ -245,7 +245,7 @@ var vidcount = 0;
 var gphwidth = 1240;
 
 function getRandomInt(min, max) {
-  
+
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -330,7 +330,7 @@ var modal = (function () {
 
         $modal.show();
         $overlay.show();
-if (type === "settings") {
+        if (type === "settings") {
             $("#modal").css("background", "#ECECEF");
             $("#close").css("display", "none");
         }
@@ -375,7 +375,7 @@ if (type === "settings") {
 
 
 var pad = function (num, totalChars) {
-   
+
     var pd = "0";
     var nm = num + "";
     while (nm.length < totalChars) {
@@ -386,7 +386,7 @@ var pad = function (num, totalChars) {
 
 ////function to get section id from image ids
 function getimageid(id) {
- 
+
     var pf;
     if (id <= 6) {
         pf = 1;
@@ -410,7 +410,7 @@ function getimageid(id) {
 
 ////function to create header popup menus
 function makeTopMenu(sectionID, pageID) {
-    
+
     var sec = parseInt(sectionID);
     var hiddenarr = parse(hidden);
     var offset = "-30";
@@ -509,7 +509,7 @@ function addMenuItem(itemNum, secNum, text, bold, margin, font) {
 ////string type = indicates service to use
 ////int id = indicates section id
 function shareURL(typeu, id) {
-  
+
     ////get description and title from html
     var desc = $(".c_" + id).find(".htext").html();
     var bigdesc = $(".c_" + id).find(".hide").html();
@@ -615,8 +615,8 @@ function getStorage() {
 ////retrieve cookie object, (for ie10 as local storage does not work)
 function getCookie() {
 
-    var i, x, y; 
-    
+    var i, x, y;
+
     var arrCookies = document.cookie.split(";");
 
     for (i = 0; i < arrCookies.length; i++) {
@@ -649,72 +649,71 @@ function parse(str) {
 
 ////favhtml check favorites (local based for non sharepoint site)
 ////favhtml check favorites (local based for non sharepoint site)
-function checkFavorites()
-{
-   
-var favArr;
+function checkFavorites() {
+
+    var favArr;
     ////alert (document.documentMode);
-if (!insp) {
+    if (!insp) {
         favs = getStorage();
-}
-console.log(favs);
-  if (favs !== null && favs !== "" && typeof favs !== "undefined"){
-  favArr = parse(favs);
-  
-  var favhtml = "";
-  var imgid;
-  var count;
-  if (favArr.length > 6){
-  $("#nextfav1").css("display","inline");
-  count = 6;
-  } else {
-   $("#nextfav1").css("display","none");
-   count = favArr.length;
-  }
+    }
+    console.log(favs);
+    if (favs !== null && favs !== "" && typeof favs !== "undefined") {
+        favArr = parse(favs);
 
-  for (var i = 0; i < count; i++) {
+        var favhtml = "";
+        var imgid;
+        var count;
+        if (favArr.length > 6) {
+            $("#nextfav1").css("display", "inline");
+            count = 6;
+        } else {
+            $("#nextfav1").css("display", "none");
+            count = favArr.length;
+        }
 
-  if (i % 2 === 0){
-  if (i > 0){
-  favhtml += "</div>";
-  }
-  favhtml += '<div class="span4 block-holder">';
-  }
-  imgid = getimageid(parseInt(favArr[i]));
-  
-  var icheight;
-  
-  if ($(window).innerWidth() < 1580){
-  icheight = "105px";
-  } else {
-  icheight = "45%";
-  }
-  
-  var colorHack = '';
-  if (favArr[i] == 9 || favArr[i] == 10)
-      colorHack = 'color:black;'
+        for (var i = 0; i < count; i++) {
 
-  favhtml +=
-      '<div style="background:url(../Images/buttons/' + favArr[i] + "rollover" + add + ".png) no-repeat;height:" + icheight + ';" class="ic2 promo-block-2x1 a-' + (i + 1) + ' hidden hiddenf hide-show"><a rel="' + favArr[i] +
-      '" class="nav-link menu-item" href="#"><div style="display:none;' + colorHack +
-      '" rel="' +
-      favArr[i] + '" class="title">' + $(".c_" + favArr[i] + " > div").find(".htext").html() + "</div></a></div>";
-  
-}
+            if (i % 2 === 0) {
+                if (i > 0) {
+                    favhtml += "</div>";
+                }
+                favhtml += '<div class="span4 block-holder">';
+            }
+            imgid = getimageid(parseInt(favArr[i]));
 
-$("#favholder").html(favhtml);
-} else {
-$("#favholder").html('<div class="emptyfavs">Click the favorite button on the Use Case pages to add them to this section</div>');
-  }
-$("#nextfav1").attr("rel","0");
-return favs;
+            var icheight;
+
+            if ($(window).innerWidth() < 1580) {
+                icheight = "105px";
+            } else {
+                icheight = "45%";
+            }
+
+            var colorHack = '';
+            if (favArr[i] == 9 || favArr[i] == 10)
+                colorHack = 'color:black;'
+
+            favhtml +=
+                '<div style="background:url(../Images/buttons/' + favArr[i] + "rollover" + add + ".png) no-repeat;height:" + icheight + ';" class="ic2 promo-block-2x1 a-' + (i + 1) + ' hidden hiddenf hide-show"><a rel="' + favArr[i] +
+                '" class="nav-link menu-item" href="#"><div style="display:none;' + colorHack +
+                '" rel="' +
+                favArr[i] + '" class="title">' + $(".c_" + favArr[i] + " > div").find(".htext").html() + "</div></a></div>";
+
+        }
+
+        $("#favholder").html(favhtml);
+    } else {
+        $("#favholder").html('<div class="emptyfavs">Click the favorite button on the Use Case pages to add them to this section</div>');
+    }
+    $("#nextfav1").attr("rel", "0");
+    return favs;
 
 }
 
 ////check recommended: 
 ////TODO: integrate DB code for sharepoint users
 function checkRec(start) {
-    
+
     var recArr = parse(rec);
 
     var favhtml = "";
@@ -792,7 +791,7 @@ function checkRec(start) {
 function nextfav(oid, cont, cont2) {
 
     if (!insp) {
-            favs = getStorage();
+        favs = getStorage();
     }
 
 
@@ -861,9 +860,9 @@ function nextfav(oid, cont, cont2) {
 
 ////add favorite to user local storage
 function addFavorite(id, removed) {
- 
+
     if (!insp) {
-            favs = getStorage();
+        favs = getStorage();
     }
 
     var favArr = parse(favs);
@@ -894,7 +893,7 @@ function addFavorite(id, removed) {
     console.log("newfavs:" + newfavs);
     favs = newfavs;
     if (!insp) {
-            setStorage(newfavs);
+        setStorage(newfavs);
     } else {
         addFav();
     }
@@ -928,7 +927,7 @@ var columnstretch = [];
 var menuleft;
 
 function setMenuActive(id) {
- 
+
     var mid;
     var nwidth = $("#navigation").width();
     ////var move=155;
@@ -979,11 +978,11 @@ function setMenuActive(id) {
     $("#menupointer img").attr("src", "../Images/pointer-" + mid + ".png");
     if (mid === 0) {
         $("#menupointer").fadeOut("slow");
-        $("#menufloat").css("padding-bottom","10px");
+        $("#menufloat").css("padding-bottom", "10px");
         $("#topmenu").hide();
     } else {
         $("#menupointer").fadeIn("slow");
-        $("#menufloat").css("padding-bottom","0px");
+        $("#menufloat").css("padding-bottom", "0px");
         $("#topmenu").show();
     }
     $("#menupointer").animate({ "left": move.toString() + "px" }, 1000, "easeInOutCubic", function () { });
@@ -1012,14 +1011,15 @@ function initilizeStage() {
     visibleWidth = windowWidth - (handleWidth * 2);
     spaceWidth = (windowWidth - contentWidth - (handleWidth * 2)) / -2;
     var lefthandle = handleWidth;
-   var icwidth, icheight, txtholder, spacertop, spacer, spacertops, tpad, bbtn, font, line, bg, topspacer, icspacer, txtspacer, favmainfnt, favmainl, icgw, vh, tfont, fw, nav, navfont, navmargin, cleft, imgwidth, cmid, cright, quotetxt, favpad, lowermenufont, videowd,adm,reccont;
+    var icwidth, icheight, txtholder, spacertop, spacer, spacertops, tpad, bbtn, font, line, bg, topspacer, icspacer, txtspacer, favmainfnt, favmainl, icgw, vh, tfont, fw, nav, navfont, navmargin, cleft, imgwidth, cmid, cright, quotetxt, favpad, lowermenufont, videowd, adm, reccont;
 
-   if (windowWidth < 1580) {
-       $("#mainImageWmv").css("width", "570");
-       $("#mainImageWmv").css("height", "348");
-       $("#mainImageSwf").css("width", "570");
-       $("#mainImageSwf").css("height", "348");
-       add = "-SM";
+    if (windowWidth < 1580) {
+        $("#mainImageWmv").css("width", "570");
+        $("#mainImageWmv").css("height", "348");
+        $("#mainImageSwf").css("width", "570");
+        $("#mainImageSwf").css("height", "348");
+        $("#dvUI").css("top", "418px");
+        add = "-SM";
         icwidth = "390px";
         icheight = "105px";
         txtholder = "465px";
@@ -1037,10 +1037,10 @@ function initilizeStage() {
         favmainl = "35px";
         icgw = "108px";
         tfont = "32px";
-		reccont = "650px";
+        reccont = "650px";
         ////nav width
         nav = "1000px";
-adm = "859px";
+        adm = "859px";
         gphwidth = 859;
         ////quote text width
         quotetxt = "880px";
@@ -1058,15 +1058,16 @@ adm = "859px";
         cmid = 45;
         cright = 450;
         $(".span4").each(function (index) {
-            $(this).css("width","115px");
+            $(this).css("width", "115px");
 
         });
     } else {
-       $("#mainImageWmv").css("width", "675");
-       $("#mainImageWmv").css("height", "410");
-       $("#mainImageSwf").css("width", "675");
-       $("#mainImageSwf").css("height", "410");
-       add = "";
+        $("#mainImageWmv").css("width", "675");
+        $("#mainImageWmv").css("height", "410");
+        $("#mainImageSwf").css("width", "675");
+        $("#mainImageSwf").css("height", "410");
+        $("#dvUI").css("top", "460px");
+        add = "";
         icwidth = "570px";
         icheight = "45%";
         txtholder = "675px";
@@ -1075,7 +1076,7 @@ adm = "859px";
         spacertops = "120px";
         tpad = "8px";
         bbtn = "60px";
-reccont = "500px";
+        reccont = "500px";
         font = "16px";
         line = "20px";
         bg = "580px";
@@ -1087,7 +1088,7 @@ reccont = "500px";
         tfont = "40px";
         icgw = "162px";
         vh = "410px";
-adm = "1249px";
+        adm = "1249px";
         gphwidth = 1249;
         ////nav width
         nav = "1290px";
@@ -1105,7 +1106,7 @@ adm = "1249px";
         $("#nextfav2").attr("src", "../Images/next.png").css({ "bottom": "-12px", "padding-left": "100px" });
         $("#favmain").css("bottom", "15px");
         $(".span4").each(function (index) {
-            $(this).css("width","170px");
+            $(this).css("width", "170px");
 
         });
     }
@@ -1125,8 +1126,8 @@ adm = "1249px";
     $(".cmid").css("width", cmid.toString() + "px");
     $(".guide").css("width", tbl.toString() + "px");
     $(".guideimg").css("width", ((tbl / 2) - 10) + "px");
-    
-   $("#anltable").css("width", adm);
+
+    $("#anltable").css("width", adm);
     $("#cptable").css("width", adm);
     $("#rectable").css("width", adm);
 
@@ -1240,7 +1241,7 @@ adm = "1249px";
     //rms
     $(".promo-block-2x1 > .title").css({ "padding": tpad, "font-size": font, "line-height": line });
     $(".promo-block-2x1 > .nav-link > .title").css({ "padding": tpad, "font-size": font, "line-height": line });
-    
+
 
 
 
@@ -1318,7 +1319,7 @@ adm = "1249px";
 }
 
 function resizeWindow() {
-  
+
     clearTimeout(resizeInterval);
     resizeInterval = setTimeout(function () { initilizeStage(); }, 300);
 
@@ -1329,7 +1330,7 @@ function resizeWindow() {
 ////-----------------------------------------------------------------------------------------------
 
 function scrollToLocation(scrollTo, scrollToOffset, scrollspeed, onComplete) {
-   
+
     var destination = $(scrollTo).offset().top - scrollToOffset;
     var easing = "easeInOutQuad";
     $("html:not(:animated),body:not(:animated)").animate({ scrollTop: destination }, scrollspeed, easing, onComplete);
@@ -1341,7 +1342,7 @@ function scrollToLocation(scrollTo, scrollToOffset, scrollspeed, onComplete) {
 //// -----------------------------------------------------------------------------------------------
 
 function settext() {
-  
+
     $(".rtext").each(function () {
         var p = $(this).find("p");
         var cont = $(this).find(".textcont");
@@ -1431,7 +1432,7 @@ function getHash() {
 var footer = $(".column_content.active .footer .content").html();
 
 $(window).load(function () {
-   
+
     //// makes sure the whole site is loaded
 
     $("#status").fadeOut(); //// will first fade out the loading animation
@@ -2463,7 +2464,7 @@ $(document).ready(function () {
                 modal.open({ content: $("#videop").contents(), type: "vid" });
             }
             else {
-                var section = parseInt(id / 3) + 1;
+                var section = parseInt((id - 1) / 3) + 1;
                 var item = (id - 1) % 3 + 1;
 
                 if (Silverlight.isInstalled("5.0") || hasFlash() == false) {
@@ -2480,17 +2481,17 @@ $(document).ready(function () {
                 else {
                     modal.open({
                         content: '<object type="application/x-shockwave-flash" data=' + baseurl + '/videos/Module ' + section +
-                        ' - Demo ' + 
-                        item + 
-                        '.swf" width="' + 
-                        wd + 
-                        '" height="' + 
-                        ht + 
+                        ' - Demo ' +
+                        item +
+                        '.swf" width="' +
+                        wd +
+                        '" height="' +
+                        ht +
                         '">' +
                         ' <param name="movie" value="' + baseurl + '/videos/Module ' +
-                        section + 
-                        ' - Demo ' + 
-                        item + 
+                        section +
+                        ' - Demo ' +
+                        item +
                         '.swf" />' +
                                      ' <param name="allowFullScreen" value="true" />' +
                                      ' <param name="wmode" value="transparent" />' +
@@ -2929,9 +2930,9 @@ function showFeedback() {
 }());
 
 function supports_html5_storage() {
-  try {
-    return 'localStorage' in window && window['localStorage'] !== null;
-  } catch (e) {
-    return false;
-  }
+    try {
+        return 'localStorage' in window && window['localStorage'] !== null;
+    } catch (e) {
+        return false;
+    }
 }
