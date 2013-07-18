@@ -431,60 +431,60 @@ function makeTopMenu(sectionID, pageID) {
 
     if (sec === 1) {
         if (jQuery.inArray("1", hiddenarr) < 0) {
-            menuhtml += addMenuItem(1, 1, "Store, Sync, And Share Your Content", pageID === 1, navfont, navmargin);
+            menuhtml += addMenuItem(1, 1, "Store, sync, and share your content", pageID === 1, navfont, navmargin);
         }
         if (jQuery.inArray("2", hiddenarr) < 0) {
-            menuhtml += addMenuItem(2, 1, "Keep Everyone On The Same Page", pageID === 2, navfont, navmargin);
+            menuhtml += addMenuItem(2, 1, "Keep everyone on the same page", pageID === 2, navfont, navmargin);
         }
         if (jQuery.inArray("3", hiddenarr) < 0) {
-            menuhtml += addMenuItem(3, 1, "Stay On Track And Deliver On Time", pageID === 3, navfont, navmargin);
+            menuhtml += addMenuItem(3, 1, "Stay on track and deliver on time", pageID === 3, navfont, navmargin);
         }
         if (jQuery.inArray("4", hiddenarr) < 0) {
-            menuhtml += addMenuItem(4, 1, "Find The Right People", pageID === 4, navfont, navmargin);
+            menuhtml += addMenuItem(4, 1, "Find the right people", pageID === 4, navfont, navmargin);
         }
-        if (jQuery.inArray("5", hiddenarr) < 0) { menuhtml += addMenuItem(5, 1, "Find What You Need", pageID === 5, navfont, navmargin); }
+        if (jQuery.inArray("5", hiddenarr) < 0) { menuhtml += addMenuItem(5, 1, "Find what you need", pageID === 5, navfont, navmargin); }
 
         if (jQuery.inArray("6", hiddenarr) < 0) {
-            menuhtml += addMenuItem(6, 1, "Make Informed Decisions", pageID === 6, navfont, navmargin);
+            menuhtml += addMenuItem(6, 1, "Make informed decisions", pageID === 6, navfont, navmargin);
         }
     } else if (sec === 7) {
         if (jQuery.inArray("7", hiddenarr) < 0) {
-            menuhtml += addMenuItem(7, 7, "Onboard New Employees", pageID === 7, navfont, navmargin);
+            menuhtml += addMenuItem(7, 7, "Onboard new employees", pageID === 7, navfont, navmargin);
         }
         if (jQuery.inArray("8", hiddenarr) < 0) {
-            menuhtml += addMenuItem(8, 7, "Keep Everyone Informed", pageID === 8, navfont, navmargin);
+            menuhtml += addMenuItem(8, 7, "Keep everyone informed", pageID === 8, navfont, navmargin);
         }
     } else if (sec === 9) {
         if (jQuery.inArray("9", hiddenarr) < 0) {
-            menuhtml += addMenuItem(9, 9, "Share Your Knowledge", pageID === 9, navfont, navmargin);
+            menuhtml += addMenuItem(9, 9, "Share your knowledge", pageID === 9, navfont, navmargin);
         }
         if (jQuery.inArray("10", hiddenarr) < 0) {
-            menuhtml += addMenuItem(10, 9, "Boost Business Processes", pageID === 10, navfont, navmargin);
+            menuhtml += addMenuItem(10, 9, "Boost business processes", pageID === 10, navfont, navmargin);
         }
     } else if (sec === 11) {
         if (jQuery.inArray("11", hiddenarr) < 0) {
-            menuhtml += addMenuItem(11, 11, "Make Your Customers And Partners Happy", pageID === 11, navfont, navmargin);
+            menuhtml += addMenuItem(11, 11, "Make your customers and partners happy", pageID === 11, navfont, navmargin);
         }
         if (jQuery.inArray("12", hiddenarr) < 0) {
-            menuhtml += addMenuItem(12, 11, "Engage Your Audience Online", pageID === 12, navfont, navmargin);
+            menuhtml += addMenuItem(12, 11, "Engage your audience online", pageID === 12, navfont, navmargin);
         }
         if (jQuery.inArray("13", hiddenarr) < 0) {
-            menuhtml += addMenuItem(13, 11, "Align Your Teams", pageID === 13, navfont, navmargin);
+            menuhtml += addMenuItem(13, 11, "Align your teams", pageID === 13, navfont, navmargin);
         }
     } else if (sec === 14) {
         if (jQuery.inArray("14", hiddenarr) < 0) {
-            menuhtml += addMenuItem(14, 14, "Crunch The Numbers Together", pageID === 14, navfont, navmargin);
+            menuhtml += addMenuItem(14, 14, "Crunch the numbers together", pageID === 14, navfont, navmargin);
         }
     } else if (sec === 15) {
         if (jQuery.inArray("15", hiddenarr) < 0) {
-            menuhtml += addMenuItem(15, 15, "Help Meet Compliance Needs", pageID === 15, navfont, navmargin);
+            menuhtml += addMenuItem(15, 15, "Help meet compliance needs", pageID === 15, navfont, navmargin);
         }
     } else if (sec === 16) {
         if (jQuery.inArray("16", hiddenarr) < 0) {
-            menuhtml += addMenuItem(16, 16, "Provide The Right Support", pageID === 16, navfont, navmargin);
+            menuhtml += addMenuItem(16, 16, "Provide the right support", pageID === 16, navfont, navmargin);
         }
         if (jQuery.inArray("17", hiddenarr) < 0) {
-            menuhtml += addMenuItem(17, 16, "Empower People And Stay In Control", pageID === 17, navfont, navmargin);
+            menuhtml += addMenuItem(17, 16, "Empower people and stay in control", pageID === 17, navfont, navmargin);
         }
     }
     menuhtml += "</ul>";
