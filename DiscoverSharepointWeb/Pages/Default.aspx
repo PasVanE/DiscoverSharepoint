@@ -53,35 +53,85 @@
              var userToken = '<asp:Literal ID="usertoken" runat="server"></asp:Literal>';
              var approved = '<asp:Literal ID="approved" runat="server"></asp:Literal>';
              var startpage = 1;
+             var lastPageId = 18;
+             var isIE7 = false;
              //load the SharePoint resources
              $(document).ready(function () {
-                 if (document.documentMode > 8) {
-                     $("#videomain").show();
-                     $("#videomain").prepend('<source src="https://mediasvc08rg9b3g5vnth.blob.core.windows.net/asset-64114c7b-4aac-49e7-8759-dc99581ca9d4/SharePoint%20Vision%20Video%20v9_8000k.mp4?sv=2012-02-12&st=2013-06-19T00%3A08%3A47Z&se=2015-06-19T00%3A08%3A47Z&sr=c&si=b7947981-aed0-416a-b2e6-3177b19de5b1&sig=6VDF0MHQm%2FO3x0v84fpFsgd4scrxHC42nui048OtbOQ%3D" type="video/mp4"/><track src="../Videos/capmain.'+capext+'" label="English" kind="subtitles" srclang="en" />');
+                 
+                 if (jQuery.browser.version == 7.0 && jQuery.browser.msie == true) {
+                     alert("Your browser version is not supported. Please upgrade your browser to IE 8 or higher to run this site.");
+                     isIE7 = true;
                  }
                  else {
-                     if (Silverlight.isInstalled("5.0") || hasFlash() == false)
-                         $("#videowmv").show();
-                     else
-                         $("#videoswf").show();
-                 }
-
-                 if (insp) {
-                     var scriptbase;
-                     // The SharePoint js files URL are in the form:
-                     // web_url/_layouts/15/resource
-                     if (hostweburl !== null && hostweburl !== "") {
-                         renderChrome();
-                         scriptbase = hostweburl + "/_layouts/15/";
-                         //$.getScript(scriptbase + "SP.UI.Controls.js", renderChrome);
+                    
+                     if (document.documentMode > 8) {
+                         $("#videomain").show();
+                         $("#videomain").prepend('<source src="https://mediasvc08rg9b3g5vnth.blob.core.windows.net/asset-64114c7b-4aac-49e7-8759-dc99581ca9d4/SharePoint%20Vision%20Video%20v9_8000k.mp4?sv=2012-02-12&st=2013-06-19T00%3A08%3A47Z&se=2015-06-19T00%3A08%3A47Z&sr=c&si=b7947981-aed0-416a-b2e6-3177b19de5b1&sig=6VDF0MHQm%2FO3x0v84fpFsgd4scrxHC42nui048OtbOQ%3D" type="video/mp4"/><track src="../Videos/capmain.'+capext+'" label="English" kind="subtitles" srclang="en" />');
                      }
-                     addPage('1');
-                     if (hidden!=null&&hidden!=""){
-                         checkHidden();
+                     else {
+                         if (Silverlight.isInstalled("5.0") || hasFlash() == false)
+                             $("#videowmv").show();
+                         else
+                             $("#videoswf").show();
                      }
-                 }
-                 console.log('isadmin = <asp:Literal ID="ltlTest" runat="server"></asp:Literal>');
+                    
+                     /*
+                     //Check flash on browser
+                     var hasFlash = ((typeof navigator.plugins != "undefined" && typeof navigator.plugins["Shockwave Flash"] == "object")); //|| (window.ActiveXObject && (new ActiveXObject("ShockwaveFlash.ShockwaveFlash")) != false));
 
+                     //Check silverlight on browser
+                     var browser = navigator.appName; // Get browser
+                     var silverlightInstalled = false;
+
+                     if (browser == 'Microsoft Internet Explorer') {
+                         try {
+                             var slControl = new ActiveXObject('AgControl.AgControl');
+                             silverlightInstalled = true;
+                         }
+                         catch (e) {
+                         }
+                     }
+                     else {
+                         // Handle Netscape, FireFox, Google chrome etc
+                         try {
+                             if (navigator.plugins["Silverlight Plug-In"]) {
+                                 silverlightInstalled = true;
+                             }
+                         }
+                         catch (e) {
+                         }
+                     }
+
+                     //Check HTML5 on browser
+                     var test_canvas = document.createElement("canvas")
+                     var canvascheck = (test_canvas.getContext) ? true : false
+
+                     if (canvascheck) {
+                         $("#videomain").prepend('<source src="https://mediasvc08rg9b3g5vnth.blob.core.windows.net/asset-64114c7b-4aac-49e7-8759-dc99581ca9d4/SharePoint%20Vision%20Video%20v9_8000k.mp4?sv=2012-02-12&st=2013-06-19T00%3A08%3A47Z&se=2015-06-19T00%3A08%3A47Z&sr=c&si=b7947981-aed0-416a-b2e6-3177b19de5b1&sig=6VDF0MHQm%2FO3x0v84fpFsgd4scrxHC42nui048OtbOQ%3D" type="video/mp4"/><track src="../Videos/capmain.' + capext + '" label="English" kind="subtitles" srclang="en" />');
+                     }
+                     else if (silverlightInstalled) {
+                         $("#videomain").prepend('<object height="270" width="465" data="https://mediasvc08rg9b3g5vnth.blob.core.windows.net/asset-64114c7b-4aac-49e7-8759-dc99581ca9d4/SharePoint%20Vision%20Video%20v9_8000k.mp4?sv=2012-02-12&st=2013-06-19T00%3A08%3A47Z&se=2015-06-19T00%3A08%3A47Z&sr=c&si=b7947981-aed0-416a-b2e6-3177b19de5b1&sig=6VDF0MHQm%2FO3x0v84fpFsgd4scrxHC42nui048OtbOQ%3D"></object>');
+                     }
+                     else if (hasFlash) {
+                         $("#videomain").prepend('<object height="270" width="465" data="https://mediasvc08rg9b3g5vnth.blob.core.windows.net/asset-64114c7b-4aac-49e7-8759-dc99581ca9d4/SharePoint%20Vision%20Video%20v9_8000k.mp4?sv=2012-02-12&st=2013-06-19T00%3A08%3A47Z&se=2015-06-19T00%3A08%3A47Z&sr=c&si=b7947981-aed0-416a-b2e6-3177b19de5b1&sig=6VDF0MHQm%2FO3x0v84fpFsgd4scrxHC42nui048OtbOQ%3D"></object>');
+                     }
+                     */
+                     if (insp) {
+                         var scriptbase;
+                         // The SharePoint js files URL are in the form:
+                         // web_url/_layouts/15/resource
+                         if (hostweburl !== null && hostweburl !== "") {
+                             renderChrome();
+                             scriptbase = hostweburl + "/_layouts/15/";
+                             //$.getScript(scriptbase + "SP.UI.Controls.js", renderChrome);
+                         }
+                         addPage('1');
+                         if (hidden!=null&&hidden!=""){
+                             checkHidden();
+                         }
+                     }
+                     console.log('isadmin = <asp:Literal ID="ltlTest" runat="server"></asp:Literal>');
+                 }
              });
 
              //check recommended: 
@@ -194,6 +244,14 @@
 
 
              function addPage(pageid) {
+                 if (pageid == lastPageId) {
+                     $("#rightshade").css({ "opacity": "1" });
+                     $("#rightshade:hover").css({ "opacity": "1" });
+                 }
+                 else {
+                     $("#rightshade").css({ "opacity": ".8" });
+                     $("#rightshade:hover").css({ "opacity": ".5" });
+                 }
                  var pageinfo = { 'usertoken': userToken, 'pageid': pageid };
                  $.ajax({
                      type: "POST",
