@@ -298,6 +298,9 @@
     </Content>
     <None Include="Properties\PublishProfiles\discoversharepoint - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\discoversharepoint - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\discoversharepointdevelopment - FTP %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\discoversharepointdevelopment - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\discoversharepointdevelopment - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\SharePoint101 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\SharePoint101 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
@@ -374,6 +377,46 @@
     <Content Include="Videos\9cap.xml" />
     <Content Include="Videos\capmain.txt" />
     <Content Include="Videos\capmain.xml" />
+    <Content Include="Videos\Module 1 - Demo 1.swf" />
+    <Content Include="Videos\Module 1 - Demo 1.wmv" />
+    <Content Include="Videos\Module 1 - Demo 2.swf" />
+    <Content Include="Videos\Module 1 - Demo 2.wmv" />
+    <Content Include="Videos\Module 1 - Demo 3.swf" />
+    <Content Include="Videos\Module 1 - Demo 3.wmv" />
+    <Content Include="Videos\Module 2 - Demo 1.swf" />
+    <Content Include="Videos\Module 2 - Demo 1.wmv" />
+    <Content Include="Videos\Module 2 - Demo 2.swf" />
+    <Content Include="Videos\Module 2 - Demo 2.wmv" />
+    <Content Include="Videos\Module 2 - Demo 3.swf" />
+    <Content Include="Videos\Module 2 - Demo 3.wmv" />
+    <Content Include="Videos\Module 3 - Demo 1.swf" />
+    <Content Include="Videos\Module 3 - Demo 1.wmv" />
+    <Content Include="Videos\Module 3 - Demo 2.swf" />
+    <Content Include="Videos\Module 3 - Demo 2.wmv" />
+    <Content Include="Videos\Module 3 - Demo 3.swf" />
+    <Content Include="Videos\Module 3 - Demo 3.wmv" />
+    <Content Include="Videos\Module 4 - Demo 1.swf" />
+    <Content Include="Videos\Module 4 - Demo 1.wmv" />
+    <Content Include="Videos\Module 4 - Demo 2.swf" />
+    <Content Include="Videos\Module 4 - Demo 2.wmv" />
+    <Content Include="Videos\Module 4 - Demo 3.swf" />
+    <Content Include="Videos\Module 4 - Demo 3.wmv" />
+    <Content Include="Videos\Module 5 - Demo 1.swf" />
+    <Content Include="Videos\Module 5 - Demo 1.wmv" />
+    <Content Include="Videos\Module 5 - Demo 2.swf" />
+    <Content Include="Videos\Module 5 - Demo 2.wmv" />
+    <Content Include="Videos\Module 5 - Demo 3.swf" />
+    <Content Include="Videos\Module 5 - Demo 3.wmv" />
+    <Content Include="Videos\Module 6 - Demo 1.swf" />
+    <Content Include="Videos\Module 6 - Demo 1.wmv" />
+    <Content Include="Videos\Module 6 - Demo 2.swf" />
+    <Content Include="Videos\Module 6 - Demo 2.wmv" />
+    <Content Include="Videos\Module 6 - Demo 3.swf" />
+    <Content Include="Videos\Module 6 - Demo 3.wmv" />
+    <Content Include="Videos\Module 6 - Demo 4.swf" />
+    <Content Include="Videos\Module 6 - Demo 4.wmv" />
+    <Content Include="Videos\SharePoint Vision Video.swf" />
+    <Content Include="Videos\SharePoint Vision Video.wmv" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
