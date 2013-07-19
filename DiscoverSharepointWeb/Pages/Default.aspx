@@ -55,8 +55,8 @@
              var startpage = 1;
              //load the SharePoint resources
              $(document).ready(function () {
-                 if (document.documentMode > 8) {
-                     $("#videomain").show();
+                 if (document.documentMode > 9) {
+                     $("#videomn").show();
                      $("#videomain").prepend('<source src="https://mediasvc08rg9b3g5vnth.blob.core.windows.net/asset-64114c7b-4aac-49e7-8759-dc99581ca9d4/SharePoint%20Vision%20Video%20v9_8000k.mp4?sv=2012-02-12&st=2013-06-19T00%3A08%3A47Z&se=2015-06-19T00%3A08%3A47Z&sr=c&si=b7947981-aed0-416a-b2e6-3177b19de5b1&sig=6VDF0MHQm%2FO3x0v84fpFsgd4scrxHC42nui048OtbOQ%3D" type="video/mp4"/><track src="../Videos/capmain.'+capext+'" label="English" kind="subtitles" srclang="en" />');
                  }
                  else {
@@ -464,15 +464,12 @@ Browse through these scenarios to discover what SharePoint is and what’s in it
             <video id="videomain" width="675" height="412" poster="../Images/vision_poster.png" controls></video>
         </div>
         <div id="videowmv" style="display:none;position:absolute;width:675px;height:412px">
-<%--           <img id="mainImageWmv" width="675" height="412" src="../Images/vision_poster.png" />--%>
-           <video id="video2" width="675" height="412" poster="../Images/vision_poster.png" controls>
              <div id="mainImageWmv" width="675" height="412">
              <object data="data:application/x-silverlight-2," type="application/x-silverlight-2" width="100%" height="100%">
                <param name="source" value="http://iissmooth.webcastcenter.com/SmoothStreamingPlayer.xap"/>
-               <param name="InitParams" value="DeliveryMethod=Progressive Download, mediaurl=http://localhost:25498/videos/SharePoint Vision Video.wmv" />
+               <param name="InitParams" value="DeliveryMethod=Progressive Download, mediaurl=http://discoversharepointdevelopment.azurewebsites.net/videos/SharePoint Vision Video.wmv" />
              </object>
              </div>
-           </video>
         </div>
         <div id="videoswf" style="display:none;position:absolute">
             <%--<img id="mainImageSwf" width="675" height="412" src="../Images/vision_poster.png" />--%>
@@ -481,7 +478,7 @@ Browse through these scenarios to discover what SharePoint is and what’s in it
 		        <param name="movie" value="http://discoversharepointdevelopment.azurewebsites.net/videos/SharePoint Vision Video.swf" />
 		        <param name="allowFullScreen" value="true" />
 		        <param name="wmode" value="transparent" />
-		        <param name="flashVars" value="config={'playlist':['http%3A%2F%2Flocalhost:57992%2FImages%2Fvision_poster.png',{'url':'http%3A%2F%2Fclips.vorwaerts-gmbh.de%2Fbig_buck_bunny.mp4','autoPlay':false}]}" />
+		        <param name="flashVars" value="config={'playlist':['http%3A%2F%2Fdiscoversharepointdevelopment.azurewebsites.net%2FImages%2Fvision_poster.png',{'url':'http%3A%2F%2Fclips.vorwaerts-gmbh.de%2Fbig_buck_bunny.mp4','autoPlay':false}]}" />
 		        <img alt="Big Buck Bunny" src="../Images/vision_poster.png" width="640" height="360" title="No video playback capabilities, please download the video below" />
 	        </object>
            </video>

@@ -2460,7 +2460,7 @@ $(document).ready(function () {
             $("#vidplayer").prepend(' <source class="source" src="' + src + '" type="video/mp4">');
             $("#vidplayer").prepend('<track src="../Videos/' + id + "cap." + capext + '" label="English" class="track" kind="subtitles" srclang="en" />');
 
-            if (document.documentMode > 8) {
+            if (document.documentMode > 9) {
                 modal.open({ content: $("#videop").contents(), type: "vid" });
             }
             else {
