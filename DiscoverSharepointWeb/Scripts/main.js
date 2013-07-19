@@ -1101,9 +1101,9 @@ function initilizeStage() {
         navfont = "15px";
         ////nav margin size
         navmargin = "20px";
-        quotetxt = "1100px";
+        quotetxt = "1150px";
         favpad = "160px";
-        cleft = 650;
+        cleft = 700;
         cright = 570;
         imgwidth = 490;
         cmid = 90;
